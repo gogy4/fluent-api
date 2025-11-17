@@ -27,13 +27,13 @@ public class PrintingConfig<TOwner>(IRuleProcessor ruleProcessor, IPrintingProce
         return this;
     }
 
-    public PrintingConfig<TOwner> SerializeType<TType>(Func<TType, string> serializer)
+    public PrintingConfig<TOwner> Serialize<TType>(Func<TType, string> serializer)
     {
         ruleProcessor.AddRule(new SerializationRule<TType>(serializer));
         return this;
     }
 
-    public PrintingConfig<TOwner> SerializeProperty<TProperty>(
+    public PrintingConfig<TOwner> Serialize<TProperty>(
         Expression<Func<TOwner, TProperty>> property, Func<TProperty, string> serializer)
     {
         var body = property.Body as MemberExpression;

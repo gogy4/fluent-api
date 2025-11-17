@@ -18,8 +18,8 @@ namespace ObjectPrinting.HomeWork.Tests
                 .For<Person>()
                 .Exclude<int>()
                 .SetNumericCulture(CultureInfo.InvariantCulture)
-                .SerializeType<int>(x=>$"Возраст: {x}")
-                .SerializeProperty(x=>x.Name, x=>$"Имя: {x}")
+                .Serialize<int>(x=>$"Возраст: {x}")
+                .Serialize(x=>x.Name, x=>$"Имя: {x}")
                 .Trim(x=>x.Name, 2)
                 .Exclude(x=>x.Height);
             //1. Исключить из сериализации свойства определенного типа
