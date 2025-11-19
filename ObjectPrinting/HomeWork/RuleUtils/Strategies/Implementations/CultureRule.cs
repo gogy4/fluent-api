@@ -1,9 +1,9 @@
 using System.Globalization;
 using System.Reflection;
 using ObjectPrinting.HomeWork.RuleUtils.Dto;
-using ObjectPrinting.HomeWork.Strategies.Interfaces;
+using ObjectPrinting.HomeWork.RuleUtils.Strategies.Interfaces;
 
-namespace ObjectPrinting.HomeWork.Strategies.Implementations;
+namespace ObjectPrinting.HomeWork.RuleUtils.Strategies.Implementations;
 
 public class CultureRule(CultureInfo cultureInfo) : ISerializationRule
 {

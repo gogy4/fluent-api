@@ -1,7 +1,7 @@
 using System.Reflection;
 using ObjectPrinting.HomeWork.RuleUtils.Dto;
 
-namespace ObjectPrinting.HomeWork.Strategies.Interfaces;
+namespace ObjectPrinting.HomeWork.RuleUtils.Strategies.Interfaces;
 
 public interface ISerializationRule
 {

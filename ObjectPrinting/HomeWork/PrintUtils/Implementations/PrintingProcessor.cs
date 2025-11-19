@@ -21,8 +21,10 @@ public class PrintingProcessor(
             if (!strategy.CanHandle(type)) continue;
 
             var result = strategy.Print(obj, nestingLevel, visited, Print);
-            if (result != null) 
+            if (result != null)
+            {
                 return result;
+            }
         }
 
         throw new InvalidOperationException($"No strategy could print object of type {type.Name}");

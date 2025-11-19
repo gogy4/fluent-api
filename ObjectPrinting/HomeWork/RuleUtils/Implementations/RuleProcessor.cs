@@ -1,7 +1,7 @@
 using System.Reflection;
 using ObjectPrinting.HomeWork.RuleUtils.Dto;
 using ObjectPrinting.HomeWork.RuleUtils.Interfaces;
-using ObjectPrinting.HomeWork.Strategies.Interfaces;
+using ObjectPrinting.HomeWork.RuleUtils.Strategies.Interfaces;
 
 namespace ObjectPrinting.HomeWork.RuleUtils.Implementations;
 
@@ -17,7 +17,9 @@ public class RuleProcessor : IRuleProcessor
     public RuleOutcome ApplyRule(object? propertyValue, PropertyInfo? propertyInfo)
     {
         if (propertyValue == null)
+        {
             return new RuleOutcome(RuleResult.Print, "null");
+        }
 
         var current = propertyValue; 
         string? resultString = null;

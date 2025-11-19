@@ -8,18 +8,14 @@ using ObjectPrinting.HomeWork.RuleUtils.Interfaces;
 
 namespace ObjectPrinting.HomeWork.PrintUtils.Strategies.Implementations;
 
-public class ObjectPrinterStrategy(
-    IPropertyRenderer propertyRenderer,
-    IRuleProcessor ruleProcessor)
-    : IPrintStrategy
+public class ObjectPrinterStrategy(IPropertyRenderer propertyRenderer, IRuleProcessor ruleProcessor) : IPrintStrategy
 {
     public bool CanHandle(Type type) => !typeof(IEnumerable).IsAssignableFrom(type) && !SimpleHelper.IsSimple(type);
 
     public string Print(object obj, int nestingLevel, HashSet<object> visited,
         Func<object?, int, HashSet<object>, string> recursivePrinter)
     {
-        return PrintObject(obj, nestingLevel, visited, recursivePrinter,
-            ruleProcessor, propertyRenderer);
+        return PrintObject(obj, nestingLevel, visited, recursivePrinter, ruleProcessor, propertyRenderer);
     }
 
     private string PrintObject(
@@ -43,7 +39,9 @@ public class ObjectPrinterStrategy(
             );
 
             if (!string.IsNullOrEmpty(propLine))
+            {
                 stringBuilder.AppendLine(indent + propLine);
+            }
         }
 
         return stringBuilder.ToString().TrimEnd();

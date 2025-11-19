@@ -19,7 +19,10 @@ public class SimplePrinterStrategy(IRuleProcessor ruleProcessor) : IPrintStrateg
     private string Format(object obj, PropertyInfo? propInfo = null)
     {
         var outcome = ruleProcessor.ApplyRule(obj, propInfo);
-        if (outcome.Action == RuleResult.Skip) return "null";
+        if (outcome.Action == RuleResult.Skip)
+        {
+            return "null";
+        }
         return outcome.Value ?? obj.ToString() ?? string.Empty;
     }
 }

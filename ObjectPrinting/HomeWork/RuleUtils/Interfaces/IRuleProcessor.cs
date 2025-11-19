@@ -1,6 +1,6 @@
 using System.Reflection;
 using ObjectPrinting.HomeWork.RuleUtils.Dto;
-using ObjectPrinting.HomeWork.Strategies.Interfaces;
+using ObjectPrinting.HomeWork.RuleUtils.Strategies.Interfaces;
 
 namespace ObjectPrinting.HomeWork.RuleUtils.Interfaces;
 

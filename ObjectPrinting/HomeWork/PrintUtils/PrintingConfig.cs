@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using ObjectPrinting.HomeWork.PrintUtils.Interfaces;
 using ObjectPrinting.HomeWork.RuleUtils.Interfaces;
-using ObjectPrinting.HomeWork.Strategies.Implementations;
+using ObjectPrinting.HomeWork.RuleUtils.Strategies.Implementations;
 
 namespace ObjectPrinting.HomeWork.PrintUtils;
 
@@ -45,8 +45,7 @@ public class PrintingConfig<TOwner>(IRuleProcessor ruleProcessor, IPrintingProce
     public PrintingConfig<TOwner> Trim(Expression<Func<TOwner, string>> property, int length)
     {
         var body = property.Body as MemberExpression;
-        var propertyInfo = body?.Member as PropertyInfo;
-        if (propertyInfo is null)
+        if (body?.Member is not PropertyInfo propertyInfo)
         {
             throw new NullReferenceException();
         }
