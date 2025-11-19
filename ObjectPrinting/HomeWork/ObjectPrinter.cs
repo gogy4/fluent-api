@@ -1,6 +1,7 @@
 using ObjectPrinting.HomeWork.PrintUtils;
 using ObjectPrinting.HomeWork.PrintUtils.Implementations;
-using ObjectPrinting.HomeWork.PrintUtils.Interfaces;
+using ObjectPrinting.HomeWork.PrintUtils.Strategies.Implementations;
+using ObjectPrinting.HomeWork.PrintUtils.Strategies.Interfaces;
 using ObjectPrinting.HomeWork.RuleUtils.Implementations;
 
 namespace ObjectPrinting.HomeWork;
@@ -10,7 +11,12 @@ public class ObjectPrinter
     public static PrintingConfig<T> For<T>()
     {
         var ruleProcessor = new RuleProcessor();
-        var cycleForammter = new CycleFormatter(ruleProcessor);
-        return new PrintingConfig<T>(ruleProcessor, new PrintingProcessor(ruleProcessor, cycleForammter));
+        var renderProperty = new PropertyRenderer();
+        var strategies = new List<IPrintStrategy>();
+        strategies.Add(new EnumerablePrinterStrategy());
+        strategies.Add(new SimplePrinter(ruleProcessor));
+        strategies.Add(new ObjectPrinterStrategy(renderProperty, ruleProcessor));
+        strategies.Add(new CycleFormatterStrategy());
+        return new PrintingConfig<T>(ruleProcessor, new PrintingProcessor(strategies));
     }
 }

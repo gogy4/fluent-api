@@ -39,7 +39,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Name = "A", Age = 10 };
-                        var pr = ClassPrinter.For<Person>().Exclude<int>();
+                        var pr = ObjectPrinter.For<Person>().Exclude<int>();
                         return pr.PrintToString(p);
                     },
                     shouldNotContain: ["10"]
@@ -50,7 +50,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Height = 180 };
-                        var pr = ClassPrinter.For<Person>().Exclude(x => x.Height);
+                        var pr = ObjectPrinter.For<Person>().Exclude(x => x.Height);
                         return pr.PrintToString(p);
                     },
                     shouldNotContain: ["180"]
@@ -61,7 +61,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Age = 5 };
-                        var pr = ClassPrinter.For<Person>().Serialize<int>(x => $"[{x}]");
+                        var pr = ObjectPrinter.For<Person>().Serialize<int>(x => $"[{x}]");
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["[5]"]
@@ -72,7 +72,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Name = "Bob" };
-                        var pr = ClassPrinter.For<Person>().Serialize(x => x.Name, v => $"N:{v}");
+                        var pr = ObjectPrinter.For<Person>().Serialize(x => x.Name, v => $"N:{v}");
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["N:Bob"]
@@ -83,7 +83,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Name = "abcdef" };
-                        var pr = ClassPrinter.For<Person>().Trim(p => p.Name, 3);
+                        var pr = ObjectPrinter.For<Person>().Trim(p => p.Name, 3);
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["abc"]
@@ -94,7 +94,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Name = "abcdef", Note = "uvwxyz" };
-                        var pr = ClassPrinter.For<Person>()
+                        var pr = ObjectPrinter.For<Person>()
                             .Trim(p => p.Name, 3)
                             .Trim(p => p.Note, 4);
                         return pr.PrintToString(p);
@@ -107,7 +107,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Height = 12.5 };
-                        var pr = ClassPrinter.For<Person>().SetNumericCulture(CultureInfo.InvariantCulture);
+                        var pr = ObjectPrinter.For<Person>().SetNumericCulture(CultureInfo.InvariantCulture);
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["12.5"]
@@ -118,7 +118,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Name = "Benjamin" };
-                        var pr = ClassPrinter.For<Person>()
+                        var pr = ObjectPrinter.For<Person>()
                             .Serialize(x => x.Name, s => $"[{s}]")
                             .Trim(x => x.Name, 4);
                         return pr.PrintToString(p);
@@ -131,7 +131,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Age = 20, Height = 170 };
-                        var pr = ClassPrinter.For<Person>()
+                        var pr = ObjectPrinter.For<Person>()
                             .Exclude<int>()
                             .Exclude(x => x.Height);
                         return pr.PrintToString(p);
@@ -147,7 +147,7 @@ namespace ObjectPrinting.HomeWork.Tests
                         var b = new Person { Name = "B" };
                         a.Child = b;
                         b.Parent = a;
-                        var pr = ClassPrinter.For<Person>();
+                        var pr = ObjectPrinter.For<Person>();
                         return pr.PrintToString(a);
                     },
                     shouldContain: ["<see Person level=0>"]
@@ -178,7 +178,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var arr = new[] { new Person { Name = "A" }, new Person { Name = "B" } };
-                        return ClassPrinter.For<Person[]>().PrintToString(arr);
+                        return ObjectPrinter.For<Person[]>().PrintToString(arr);
                     },
                     shouldContain: ["A", "B"]
                 )).SetName("ShouldBeTrue_When_ArraySerialization_Works");
@@ -188,7 +188,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var list = new List<Person> { new Person { Name = "X" } };
-                        return ClassPrinter.For<List<Person>>().PrintToString(list);
+                        return ObjectPrinter.For<List<Person>>().PrintToString(list);
                     },
                     shouldContain: ["X"]
                 )).SetName("ShouldBeTrue_When_ListSerialization_Works");
@@ -198,7 +198,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var d = new Dictionary<int, Person> { { 1, new Person { Name = "K" } } };
-                        return ClassPrinter.For<Dictionary<int, Person>>().PrintToString(d);
+                        return ObjectPrinter.For<Dictionary<int, Person>>().PrintToString(d);
                     },
                     shouldContain: ["1", "K"]
                 )).SetName("ShouldBeTrue_When_DictionarySerialization_Works");
@@ -208,7 +208,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { LuckyNumber = 7 };
-                        return ClassPrinter.For<Person>().PrintToString(p);
+                        return ObjectPrinter.For<Person>().PrintToString(p);
                     },
                     shouldContain: ["7"]
                 )).SetName("ShouldBeTrue_When_NullableType_SerializesValue");
@@ -218,7 +218,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { LuckyNumber = null };
-                        return ClassPrinter.For<Person>().PrintToString(p);
+                        return ObjectPrinter.For<Person>().PrintToString(p);
                     },
                     shouldNotContain: ["LuckyNumber"]
                 )).SetName("ShouldBeTrue_When_NullableTypeNull_PrintsNull");
@@ -235,7 +235,7 @@ namespace ObjectPrinting.HomeWork.Tests
                                 [3, 4]
                             ]
                         };
-                        return ClassPrinter.For<Person>().PrintToString(p);
+                        return ObjectPrinter.For<Person>().PrintToString(p);
                     },
                     shouldContain: ["1", "4"]
                 )).SetName("ShouldBeTrue_When_DeepNestedCollections_Serialize");
@@ -245,7 +245,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Friends = new List<Person> { new Person { Age = 10 } } };
-                        var pr = ClassPrinter.For<Person>().Serialize<int>(x => $"[{x}]");
+                        var pr = ObjectPrinter.For<Person>().Serialize<int>(x => $"[{x}]");
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["[10]"]
@@ -256,7 +256,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Salary = 1234.567m };
-                        var pr = ClassPrinter.For<Person>().SetNumericCulture(CultureInfo.InvariantCulture);
+                        var pr = ObjectPrinter.For<Person>().SetNumericCulture(CultureInfo.InvariantCulture);
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["1234.567"]
@@ -267,7 +267,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Name = "abcdef", Note = "xyz" };
-                        var pr = ClassPrinter.For<Person>().Trim(x => x.Name, 2);
+                        var pr = ObjectPrinter.For<Person>().Trim(x => x.Name, 2);
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["ab", "xyz"]
@@ -278,7 +278,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Name = "Qwerty" };
-                        var pr = ClassPrinter.For<Person>()
+                        var pr = ObjectPrinter.For<Person>()
                             .Exclude(x => x.Note)
                             .Serialize(x => x.Name, v => v.ToUpper());
                         return pr.PrintToString(p);
@@ -291,7 +291,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Name = "Bob", Age = 20 };
-                        var pr = ClassPrinter.For<Person>()
+                        var pr = ObjectPrinter.For<Person>()
                             .Serialize<int>(x => $"I{x}")
                             .Exclude(x => x.Age);
                         return pr.PrintToString(p);
@@ -304,7 +304,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Age = 30 };
-                        var pr = ClassPrinter.For<Person>()
+                        var pr = ObjectPrinter.For<Person>()
                             .Serialize<int>(x => $"I{x}")
                             .Serialize(x => x.Age, v => $"A{v}");
                         return pr.PrintToString(p);
@@ -324,7 +324,7 @@ namespace ObjectPrinting.HomeWork.Tests
                             cur = cur.Child;
                         }
 
-                        var pr = ClassPrinter.For<Person>();
+                        var pr = ObjectPrinter.For<Person>();
                         return pr.PrintToString(root);
                     },
                     shouldContain: ["L14"]
@@ -335,7 +335,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Friends = new List<Person>() };
-                        return ClassPrinter.For<Person>().PrintToString(p);
+                        return ObjectPrinter.For<Person>().PrintToString(p);
                     },
                     shouldContain: ["Friends"]
                 )).SetName("ShouldBeTrue_When_EmptyList_SerializesGracefully");
@@ -345,7 +345,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Parent = null };
-                        return ClassPrinter.For<Person>().PrintToString(p);
+                        return ObjectPrinter.For<Person>().PrintToString(p);
                     },
                     shouldNotContain: ["Parent"]
                 )).SetName("ShouldBeTrue_When_NullProperty_NotPrinted");
@@ -355,7 +355,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Age = 10, Height = 170 };
-                        var pr = ClassPrinter.For<Person>()
+                        var pr = ObjectPrinter.For<Person>()
                             .Serialize<int>(x => $"I{x}")
                             .Serialize<double>(x => $"D{x}");
                         return pr.PrintToString(p);
@@ -368,7 +368,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var d = new Dictionary<string, int> { { "a", 5 }, { "b", 3 }, { "c", 4 } };
-                        var pr = ClassPrinter.For<Dictionary<string, int>>()
+                        var pr = ObjectPrinter.For<Dictionary<string, int>>()
                             .Serialize<int>(i => $"[{i}]");
                         return pr.PrintToString(d);
                     },
@@ -380,7 +380,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var arr = execute;
-                        var pr = ClassPrinter.For<int[]>()
+                        var pr = ObjectPrinter.For<int[]>()
                             .Serialize<int>(x => $"#{x}");
                         return pr.PrintToString(arr);
                     },
