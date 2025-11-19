@@ -12,11 +12,13 @@ public class ObjectPrinter
     {
         var ruleProcessor = new RuleProcessor();
         var renderProperty = new PropertyRenderer();
-        var strategies = new List<IPrintStrategy>();
-        strategies.Add(new EnumerablePrinterStrategy());
-        strategies.Add(new SimplePrinterStrategy(ruleProcessor));
-        strategies.Add(new ObjectPrinterStrategy(renderProperty, ruleProcessor));
-        strategies.Add(new CycleFormatterStrategy());
+        var strategies = new List<IPrintStrategy>
+        {
+            new EnumerablePrinterStrategy(),
+            new SimplePrinterStrategy(ruleProcessor),
+            new ObjectPrinterStrategy(renderProperty, ruleProcessor),
+            new CycleFormatterStrategy()
+        };
         return new PrintingConfig<T>(ruleProcessor, new PrintingProcessor(strategies));
     }
 }
