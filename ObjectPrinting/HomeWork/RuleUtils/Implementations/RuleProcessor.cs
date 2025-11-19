@@ -13,20 +13,30 @@ public class RuleProcessor : IRuleProcessor
     {
         rules.Add(rule);
     }
-    
-    public RuleOutcome ApplyRule(object propertyValue, PropertyInfo? propertyInfo)
-    {
-        foreach (var rule in rules)
-        {
-            if (propertyInfo == null || !rule.CanApply(propertyInfo)) continue;
 
-            var result = rule.Apply(propertyValue);
-            if (result.Action == RuleResult.Skip)
+    public RuleOutcome ApplyRule(object? propertyValue, PropertyInfo? propertyInfo)
+    {
+        if (propertyValue == null)
+            return new RuleOutcome(RuleResult.Print, "null");
+
+        var current = propertyValue; 
+        string? resultString = null;
+
+        foreach (var rule in rules.Where(r => r.CanApply(propertyInfo)))
+        {
+            var outcome = rule.Apply(current);
+
+            if (outcome.Action == RuleResult.Skip)
                 return new RuleOutcome(RuleResult.Skip, null);
 
-            propertyValue = result.Value;
+            current = outcome.Value ?? current;
+            resultString = outcome.Value;
         }
 
-        return new RuleOutcome( RuleResult.Print, propertyValue.ToString());
+
+        return new RuleOutcome(
+            RuleResult.Print,
+            resultString ?? propertyValue.ToString()
+        );
     }
 }
