@@ -14,7 +14,7 @@ public class ObjectPrinter
         var renderProperty = new PropertyRenderer();
         var strategies = new List<IPrintStrategy>();
         strategies.Add(new EnumerablePrinterStrategy());
-        strategies.Add(new SimplePrinter(ruleProcessor));
+        strategies.Add(new SimplePrinterStrategy(ruleProcessor));
         strategies.Add(new ObjectPrinterStrategy(renderProperty, ruleProcessor));
         strategies.Add(new CycleFormatterStrategy());
         return new PrintingConfig<T>(ruleProcessor, new PrintingProcessor(strategies));
