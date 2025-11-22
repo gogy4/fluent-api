@@ -105,7 +105,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Height = 12.5 };
-                        var pr = ObjectPrinter.For<Person>().SetNumericCulture(CultureInfo.InvariantCulture);
+                        var pr = ObjectPrinter.For<Person>().SetFormattingCulture(CultureInfo.InvariantCulture);
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["12.5"]
@@ -254,7 +254,7 @@ namespace ObjectPrinting.HomeWork.Tests
                     () =>
                     {
                         var p = new Person { Salary = 1234.567m };
-                        var pr = ObjectPrinter.For<Person>().SetNumericCulture(CultureInfo.InvariantCulture);
+                        var pr = ObjectPrinter.For<Person>().SetFormattingCulture(CultureInfo.InvariantCulture);
                         return pr.PrintToString(p);
                     },
                     shouldContain: ["1234.567"]

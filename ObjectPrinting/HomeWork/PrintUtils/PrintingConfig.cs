@@ -16,12 +16,11 @@ public class PrintingConfig<TOwner>(IRuleProcessor ruleProcessor, IPrintingProce
 
     public PrintingConfig<TOwner> Exclude<T>()
     {
-        var type = typeof(T);
-        ruleProcessor.AddRule(new ExcludeRule(type));
+        ruleProcessor.AddRule(new ExcludeRule(typeof(T)));
         return this;
     }
 
-    public PrintingConfig<TOwner> SetNumericCulture(CultureInfo culture)
+    public PrintingConfig<TOwner> SetFormattingCulture(CultureInfo culture)
     {
         ruleProcessor.AddRule(new CultureRule(culture));
         return this;
@@ -34,31 +33,41 @@ public class PrintingConfig<TOwner>(IRuleProcessor ruleProcessor, IPrintingProce
     }
 
     public PrintingConfig<TOwner> Serialize<TProperty>(
-        Expression<Func<TOwner, TProperty>> property, Func<TProperty, string> serializer)
+        Expression<Func<TOwner, TProperty>> property,
+        Func<TProperty, string> serializer)
     {
-        var body = property.Body as MemberExpression;
-        var propertyInfo = body?.Member as PropertyInfo;
+        var propertyInfo = GetPropertyInfo(property);
         ruleProcessor.AddRule(new SerializationRule<TProperty>(serializer, propertyInfo));
         return this;
     }
 
     public PrintingConfig<TOwner> Trim(Expression<Func<TOwner, string>> property, int length)
     {
-        var body = property.Body as MemberExpression;
-        if (body?.Member is not PropertyInfo propertyInfo)
-        {
-            throw new NullReferenceException();
-        }
-
+        var propertyInfo = GetPropertyInfo(property);
         ruleProcessor.AddRule(new TrimStringRule(propertyInfo, length));
         return this;
     }
 
     public PrintingConfig<TOwner> Exclude<TProperty>(Expression<Func<TOwner, TProperty>> property)
     {
-        var body = property.Body as MemberExpression;
-        var propertyInfo = body?.Member as PropertyInfo;
+        var propertyInfo = GetPropertyInfo(property);
         ruleProcessor.AddRule(new ExcludeRule(propertyInfo));
         return this;
+    }
+    
+    private static PropertyInfo GetPropertyInfo<TProperty>(
+        Expression<Func<TOwner, TProperty>> propertyExpression)
+    {
+        if (propertyExpression.Body is not MemberExpression memberExpr)
+            throw new ArgumentException(
+                $"Expression '{propertyExpression}' must be a simple property access",
+                nameof(propertyExpression));
+
+        if (memberExpr.Member is not PropertyInfo propertyInfo)
+            throw new ArgumentException(
+                $"Expression '{propertyExpression}' must refer to a property, not a field/method",
+                nameof(propertyExpression));
+
+        return propertyInfo;
     }
 }

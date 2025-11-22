@@ -5,7 +5,8 @@ namespace ObjectPrinting.HomeWork.PrintUtils.Strategies.Implementations;
 public class CycleFormatterStrategy : IPrintStrategy
 {
     private readonly Dictionary<object, int> visited = new();
-    public bool CanHandle(Type type) => true; 
+    public bool CanHandle(Type type) => !type.IsValueType && type != typeof(string);
+
 
     public string Print(object obj, int nestingLevel, HashSet<object> ignoredVisited,
         Func<object?, int, HashSet<object>, string> ignoredRecursivePrinter)
