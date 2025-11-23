@@ -7,9 +7,9 @@ namespace ObjectPrinting.HomeWork.RuleUtils.Strategies.Implementations;
 
 public class CultureRule(CultureInfo cultureInfo) : ISerializationRule
 {
-    public bool CanApply(PropertyInfo propertyInfo)
+    public bool CanApply(PropertyInfo? propertyInfo)
     {
-        return typeof(IFormattable).IsAssignableFrom(propertyInfo.PropertyType);
+        return propertyInfo != null && typeof(IFormattable).IsAssignableFrom(propertyInfo.PropertyType);
     }
 
     public RuleOutcome Apply(object value)

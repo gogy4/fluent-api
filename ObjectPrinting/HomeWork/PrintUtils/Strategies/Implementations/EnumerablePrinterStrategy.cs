@@ -9,16 +9,15 @@ public class EnumerablePrinterStrategy : IPrintStrategy
     public bool CanHandle(Type type) => typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string);
 
     public string Print(object obj, int nestingLevel, HashSet<object> visited,
-        Func<object?, int, HashSet<object>, string> recursivePrinter)
+        Func<object?, int, HashSet<object>, string> recursivePrinter, StringBuilder sb)
     {
-        return PrintEnumerable((IEnumerable)obj, nestingLevel, visited, recursivePrinter);
+        return PrintEnumerable((IEnumerable)obj, nestingLevel, visited, recursivePrinter, sb);
     }
 
     private string PrintEnumerable(IEnumerable enumerable, int nestingLevel, HashSet<object> visited,
-        Func<object?, int, HashSet<object>, string> recursivePrinter)
+        Func<object?, int, HashSet<object>, string> recursivePrinter, StringBuilder sb)
     {
         var indent = new string('\t', nestingLevel);
-        var sb = new StringBuilder();
 
         sb.AppendLine(indent + enumerable.GetType().Name + " [");
 

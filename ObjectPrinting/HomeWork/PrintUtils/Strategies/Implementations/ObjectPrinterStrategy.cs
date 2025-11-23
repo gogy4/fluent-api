@@ -13,9 +13,9 @@ public class ObjectPrinterStrategy(IPropertyRenderer propertyRenderer, IRuleProc
     public bool CanHandle(Type type) => !typeof(IEnumerable).IsAssignableFrom(type) && !SimpleHelper.IsSimple(type);
 
     public string Print(object obj, int nestingLevel, HashSet<object> visited,
-        Func<object?, int, HashSet<object>, string> recursivePrinter)
+        Func<object?, int, HashSet<object>, string> recursivePrinter, StringBuilder sb)
     {
-        return PrintObject(obj, nestingLevel, visited, recursivePrinter, ruleProcessor, propertyRenderer);
+        return PrintObject(obj, nestingLevel, visited, recursivePrinter, ruleProcessor, propertyRenderer, sb);
     }
 
     private string PrintObject(
@@ -24,11 +24,11 @@ public class ObjectPrinterStrategy(IPropertyRenderer propertyRenderer, IRuleProc
         HashSet<object> visited,
         Func<object?, int, HashSet<object>, string> recursivePrinter,
         IRuleProcessor ruleProcessor,
-        IPropertyRenderer propertyRenderer)
+        IPropertyRenderer propertyRenderer,
+        StringBuilder sb)
     {
         var type = obj.GetType();
-        var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine(type.Name);
+        sb.AppendLine(type.Name);
         var indent = new string('\t', nestingLevel + 1);
 
         foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
@@ -40,10 +40,10 @@ public class ObjectPrinterStrategy(IPropertyRenderer propertyRenderer, IRuleProc
 
             if (!string.IsNullOrEmpty(propLine))
             {
-                stringBuilder.AppendLine(indent + propLine);
+                sb.AppendLine(indent + propLine);
             }
         }
 
-        return stringBuilder.ToString().TrimEnd();
+        return sb.ToString().TrimEnd();
     }
 }

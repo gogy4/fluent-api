@@ -1,3 +1,4 @@
+using System.Text;
 using ObjectPrinting.HomeWork.PrintUtils.Interfaces;
 using ObjectPrinting.HomeWork.PrintUtils.Strategies.Implementations;
 using ObjectPrinting.HomeWork.PrintUtils.Strategies.Interfaces;
@@ -16,11 +17,12 @@ public class PrintingProcessor(
 
         var type = obj.GetType();
 
+        var sb = new StringBuilder();
         foreach (var strategy in strategies.OrderByDescending(strategy => strategy is CycleFormatterStrategy))
         {
             if (!strategy.CanHandle(type)) continue;
 
-            var result = strategy.Print(obj, nestingLevel, visited, Print);
+            var result = strategy.Print(obj, nestingLevel, visited, Print, sb);
             if (result != null)
             {
                 return result;

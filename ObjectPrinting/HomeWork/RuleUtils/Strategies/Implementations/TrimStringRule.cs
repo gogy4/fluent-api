@@ -6,7 +6,7 @@ namespace ObjectPrinting.HomeWork.RuleUtils.Strategies.Implementations;
 
 public class TrimStringRule(PropertyInfo property, int length) : ISerializationRule
 {
-    public bool CanApply(PropertyInfo propertyInfo)
+    public bool CanApply(PropertyInfo? propertyInfo)
     {
         return property == propertyInfo && propertyInfo.PropertyType == typeof(string);
     }

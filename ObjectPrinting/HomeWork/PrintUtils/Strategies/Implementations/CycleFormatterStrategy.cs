@@ -1,3 +1,4 @@
+using System.Text;
 using ObjectPrinting.HomeWork.PrintUtils.Strategies.Interfaces;
 
 namespace ObjectPrinting.HomeWork.PrintUtils.Strategies.Implementations;
@@ -9,7 +10,7 @@ public class CycleFormatterStrategy : IPrintStrategy
 
 
     public string Print(object obj, int nestingLevel, HashSet<object> ignoredVisited,
-        Func<object?, int, HashSet<object>, string> ignoredRecursivePrinter)
+        Func<object?, int, HashSet<object>, string> ignoredRecursivePrinter, StringBuilder sb)
     {
         if (visited.TryGetValue(obj, out var originalLevel))
         {

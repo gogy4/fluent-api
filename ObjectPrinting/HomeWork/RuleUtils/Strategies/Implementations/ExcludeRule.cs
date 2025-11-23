@@ -19,13 +19,13 @@ public class ExcludeRule : ISerializationRule
         propertyToExclude = property;
     }
 
-    public bool CanApply(PropertyInfo propertyInfo)
+    public bool CanApply(PropertyInfo? propertyInfo)
     {
         if (propertyToExclude != null)
             return propertyInfo == propertyToExclude;
 
         if (typeToExclude != null)
-            return propertyInfo.PropertyType == typeToExclude;
+            return propertyInfo != null && propertyInfo.PropertyType == typeToExclude;
 
         return false;
     }

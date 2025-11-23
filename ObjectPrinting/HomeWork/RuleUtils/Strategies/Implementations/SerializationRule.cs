@@ -6,7 +6,7 @@ namespace ObjectPrinting.HomeWork.RuleUtils.Strategies.Implementations;
 
 public class SerializationRule<T>(Func<T, string> serializer, PropertyInfo? property = null) : ISerializationRule
 {
-    public bool CanApply(PropertyInfo propertyInfo)
+    public bool CanApply(PropertyInfo? propertyInfo)
     {
         if (propertyInfo is null) return true;
         var rightValue = propertyInfo.PropertyType == typeof(T);

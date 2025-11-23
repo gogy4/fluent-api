@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using ObjectPrinting.HomeWork.PrintUtils.Helpers;
 using ObjectPrinting.HomeWork.PrintUtils.Strategies.Interfaces;
 using ObjectPrinting.HomeWork.RuleUtils.Dto;
@@ -11,7 +12,7 @@ public class SimplePrinterStrategy(IRuleProcessor ruleProcessor) : IPrintStrateg
     public bool CanHandle(Type type) => SimpleHelper.IsSimple(type);
 
     public string Print(object obj, int nestingLevel, HashSet<object> visited,
-        Func<object?, int, HashSet<object>, string> recursivePrinter)
+        Func<object?, int, HashSet<object>, string> recursivePrinter,  StringBuilder sb)
     {
         return Format(obj);
     }
@@ -21,7 +22,7 @@ public class SimplePrinterStrategy(IRuleProcessor ruleProcessor) : IPrintStrateg
         var outcome = ruleProcessor.ApplyRule(obj, propInfo);
         if (outcome.Action == RuleResult.Skip)
         {
-            return "null";
+            return null;
         }
         return outcome.Value ?? obj.ToString() ?? string.Empty;
     }
