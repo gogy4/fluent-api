@@ -10,7 +10,7 @@ namespace ObjectPrinting.HomeWork.PrintUtils.Strategies.Implementations;
 
 public class ObjectPrinterStrategy(IPropertyRenderer propertyRenderer, IRuleProcessor ruleProcessor) : IPrintStrategy
 {
-    public bool CanHandle(Type type) => !typeof(IEnumerable).IsAssignableFrom(type) && !SimpleHelper.IsSimple(type);
+    public bool CanHandle(Type type) => !typeof(IEnumerable).IsAssignableFrom(type) && !SimpleTypeHelper.IsSimple(type);
 
     public string Print(object obj, int nestingLevel, HashSet<object> visited,
         Func<object?, int, HashSet<object>, string> recursivePrinter, StringBuilder sb)

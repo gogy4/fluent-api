@@ -25,7 +25,7 @@ public class PropertyRenderer : IPropertyRenderer
 
         var type = value.GetType();
 
-        if (typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string) || !SimpleHelper.IsSimple(type))
+        if (typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string) || !SimpleTypeHelper.IsSimple(type))
         {
             var printed = recursivePrinter(value, nestingLevel + 1, visited);
             return $"{prop.Name} =\n{printed}";

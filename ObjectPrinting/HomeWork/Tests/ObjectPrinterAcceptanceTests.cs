@@ -33,6 +33,97 @@ namespace ObjectPrinting.HomeWork.Tests
             get
             {
                 yield return new TestCaseData(new TestSpec(
+                    "Type-level exclude for string properties should remove all string fields",
+                    () =>
+                    {
+                        var p = new Person
+                        {
+                            Name = "Alex",
+                            Note = "Some note",
+                            Age = 30
+                        };
+
+                        var pr = ObjectPrinter.For<Person>()
+                            .For<string>().Exclude().Apply();
+
+                        return pr.PrintToString(p);
+                    },
+                    shouldNotContain: ["Alex", "Some note"],
+                    shouldContain: ["30"]                  
+                )).SetName("ShouldBeTrue_When_TypeExclude_RemovesAllPropertiesOfThatType");
+
+                yield return new TestCaseData(new TestSpec(
+                    "Trim applied to all string properties",
+                    () =>
+                    {
+                        var p = new Person { Name = "Alexander", Note = "LongNote" };
+                        var pr = ObjectPrinter.For<Person>()
+                            .For<string>().Trim(3).Apply();
+
+                        return pr.PrintToString(p);
+                    },
+                    shouldContain: ["Ale", "Lon"]
+                )).SetName("ShouldBeTrue_When_TrimAppliedToAllStringProperties");
+
+                
+                yield return new TestCaseData(new TestSpec(
+                    "Property serializer should override type serializer",
+                    () =>
+                    {
+                        var p = new Person { Age = 50 };
+                        var pr = ObjectPrinter.For<Person>()
+                            .For<int>().Serialize(i => $"T{i}").Apply()
+                            .For(x => x.Age).Serialize(i => $"P{i}").Apply();
+
+                        return pr.PrintToString(p);
+                    },
+                    shouldContain: ["T50"],
+                    shouldNotContain: ["P50"]
+                )).SetName("ShouldBeTrue_When_PropertySerializer_OverridesTypeSerializer");
+                
+                yield return new TestCaseData(new TestSpec(
+                    "Exclude specific property",
+                    () =>
+                    {
+                        var p = new Person { Name = "Bob", Note = "hidden" };
+                        var pr = ObjectPrinter.For<Person>()
+                            .For(x => x.Note).Exclude().Apply();
+
+                        return pr.PrintToString(p);
+                    },
+                    shouldNotContain: ["hidden"]
+                )).SetName("ShouldBeTrue_When_ExcludeProperty_RemovesIt");
+
+                
+                yield return new TestCaseData(new TestSpec(
+                    "Trim should not affect non-string properties",
+                    () =>
+                    {
+                        var p = new Person { Age = 12345 };
+                        var pr = ObjectPrinter.For<Person>()
+                            .For(x => x.Name).Trim(2).Apply();
+
+                        return pr.PrintToString(p);
+                    },
+                    shouldContain: ["12345"]
+                )).SetName("ShouldBeTrue_When_TrimNotAppliedToNonString");
+                
+                yield return new TestCaseData(new TestSpec(
+                    "Culture for double should not affect decimal",
+                    () =>
+                    {
+                        var p = new Person { Height = 1234.5, Salary = 999.99m };
+                        var pr = ObjectPrinter.For<Person>()
+                            .For<double>().SetCulture(CultureInfo.InvariantCulture).Apply();
+
+                        return pr.PrintToString(p);
+                    },
+                    shouldContain: ["1234.5"],
+                    shouldNotContain: ["999.99"]
+                )).SetName("ShouldBeTrue_When_CultureAppliedOnlyToDouble");
+
+                
+                yield return new TestCaseData(new TestSpec(
                     "Exclude<int> should remove int fields",
                     () =>
                     {

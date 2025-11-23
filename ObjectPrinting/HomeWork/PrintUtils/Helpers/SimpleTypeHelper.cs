@@ -1,6 +1,6 @@
 namespace ObjectPrinting.HomeWork.PrintUtils.Helpers;
 
-public static class SimpleHelper
+public static class SimpleTypeHelper
 {
     public static bool IsSimple(Type type)
     {
